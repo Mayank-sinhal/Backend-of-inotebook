@@ -16,6 +16,7 @@ router.post(
     body("password", "Password must be atleast 5 characters").isLength({
       min: 5,
     }),
+    body("about", "About can't be empty").exists(),
   ],
   async (req, res) => {
     let success = false;
@@ -41,6 +42,7 @@ router.post(
         name: req.body.name,
         password: secpass,
         email: req.body.email,
+        about: req.body.about,
       });
       const data = {
         user: {
@@ -73,7 +75,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { email, password, about } = req.body;
 
     try {
       let user = await User.findOne({ email });
@@ -100,7 +102,12 @@ router.post(
       success = true;
 
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json({ success, authtoken, name: user.name, email: user.email });
+      res.json({
+        success,
+        authtoken,
+        name: user.name,
+        email: user.email,
+      });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error");
@@ -111,10 +118,12 @@ router.post(
 //ROUTE : 3 get logedin user details : POST "/api/auth/getuser"  login required
 
 router.post("/getuser", fetchuser, async (req, res) => {
+  const success = true;
   try {
     const userID = req.user.id;
     const user = await User.findById(userID).select("-password");
-    res.send(user);
+    // console.log(user);
+    res.send({ success, user });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal server error");
