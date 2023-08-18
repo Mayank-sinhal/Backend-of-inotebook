@@ -43,6 +43,7 @@ router.post(
         password: secpass,
         email: req.body.email,
         about: req.body.about,
+        image: req.body.image,
       });
       const data = {
         user: {
