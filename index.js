@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/notes", require("./routes/notes"));
+app.use("/api/files", require("./routes/files"));
 
 app.listen(port, () => {
   console.log(`iNotebook listening on port ${port}`);
