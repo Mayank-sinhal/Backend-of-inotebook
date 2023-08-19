@@ -81,7 +81,13 @@ router.post("/addfile", fetchuser, upload.single("file"), async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-
+// Utility function to extract public ID from Cloudinary URL
+function extractPublicIdFromUrl(url) {
+  const parts = url.split("/");
+  const publicIdWithExtension = parts[parts.length - 1]; // Get the last part of the URL
+  const publicId = publicIdWithExtension.split(".")[0]; // Remove the extension
+  return publicId;
+}
 //Route 3 Delete an existing file using : delete "/api/files/deletefile"  login required
 router.delete("/deletefile/:id", fetchuser, async (req, res) => {
   try {
@@ -95,6 +101,14 @@ router.delete("/deletefile/:id", fetchuser, async (req, res) => {
     if (file.user.toString() !== req.user.id) {
       return res.status(401).send("Not allowed");
     }
+    // Extract the public ID from the Cloudinary URL
+
+    const publicId = extractPublicIdFromUrl(file.filename);
+
+    // Delete the file from Cloudinary
+    const id = `your_folder_name/${publicId}`;
+    const deletionResult = await cloudinary.uploader.destroy(id);
+    console.log("Deletion result from Cloudinary:", deletionResult);
 
     file = await File.findByIdAndDelete(req.params.id);
 
