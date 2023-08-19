@@ -4,13 +4,13 @@ const File = require("../models/File");
 const fetchuser = require("../middleware/fetchuser");
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
-const storage = multer.memoryStorage(); // Store the file in memory before processing
 const upload = multer();
+// const storage = multer.memoryStorage(); // Store the file in memory before processing
 
 cloudinary.config({
-  cloud_name: "dgzh9tncs",
-  api_key: "639888368363158",
-  api_secret: "0HZsMXA83oTrzgSmxahhG06I4Dc",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
 });
 
 //Route 1 fetch all fiels form the database using : GET "/api/files/fetchallfiles"  login required
