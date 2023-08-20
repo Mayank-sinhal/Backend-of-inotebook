@@ -10,7 +10,8 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "35mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "35mb" }));
 app.use(express.json({ limit: "10mb" })); // Increase the limit as needed
 app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase the limit as needed
 
