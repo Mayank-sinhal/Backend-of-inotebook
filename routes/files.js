@@ -48,7 +48,7 @@ router.post("/addfile", fetchuser, upload.single("file"), async (req, res) => {
 
     // Access the file buffer from req.file
     const fileBuffer = req.file.buffer;
-    console.log(req.file);
+    // console.log(req.file);
 
     // Upload the file buffer to Cloudinary
     cloudinary.uploader
